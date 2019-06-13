@@ -18,11 +18,12 @@ struct EventService {
             guard let data = dataResponse.data else { return }
             do {
                 let decoder = JSONDecoder()
-                let events = try decoder.decode(Array<EventModel>.self, from: data)
-                completion(events)
-//                print(events)
+                let items = try decoder.decode(Array<EventModel>.self, from: data)
+                completion(items)
+                print(items)
             }catch let error {
                 print(error.localizedDescription)
+                fatalError()
             }
             
         }) { (error) in

@@ -7,21 +7,48 @@
 //
 
 import Foundation
-import RxSwift
+import UIKit
+
+
+protocol LoadImageService {
+    func loadImage(index: Int, completion: @escaping (UIImage?) -> Void)
+}
 
 class ListViewModel: NSObject {
-    var subject: BehaviorSubject<[EventModel]>
+    var items: [EventModel]
     var eventService: EventService
-    
-    init(items: [EventModel], eventService: EventService) {
-        self.eventService = eventService
-        self.subject = BehaviorSubject<[EventModel]>(value: items)
+    subscript(indexPath: IndexPath) -> EventModel {
+        return items[indexPath.row]
     }
     
-    func loadData() {
+    init(items: [EventModel], eventService: EventService) {
+        self.items = items
+        self.eventService = eventService
+    }
+    
+    func loadData(completion: @escaping () -> Void) {
         eventService.loadData { [weak self] (items) in
-            self?.subject.onNext(items)
+            self?.items = items
+            completion()
         }
     }
     
+}
+
+
+extension ListViewModel: LoadImageService {
+    func loadImage(index: Int, completion: @escaping (UIImage?) -> Void) {
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            guard let self = self,
+                let imageUrl = self.items[index].imageUrl,
+                let url = URL(string: imageUrl) else { return }
+            do {
+                let data = try Data(contentsOf: url)
+                self.items[index].image = UIImage(data: data)
+                completion(self.items[index].image )
+            }catch let error {
+                print(error.localizedDescription)
+            }
+        }
+    }
 }

@@ -7,8 +7,6 @@ target 'Events' do
 
   # Pods for Events
   pod 'Alamofire', '~> 4.4'
-  pod 'RxSwift', '~> 4.4'
-  pod 'RxCocoa', '~> 4.4'
 
   target 'EventsTests' do
     inherit! :search_paths

@@ -19,6 +19,7 @@ struct EventModel: Codable {
     var date: String?
     var location1: String
     var location2: String
+    
     var image: UIImage?
     
     enum CodingKeys: String, CodingKey {
