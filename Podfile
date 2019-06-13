@@ -6,7 +6,7 @@ target 'Events' do
   use_frameworks!
 
   # Pods for Events
-  pod 'Alamofire', '~> 4.4'
+  pod 'Alamofire', '~> 4.8'
 
   target 'EventsTests' do
     inherit! :search_paths

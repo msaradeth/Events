@@ -18,8 +18,7 @@ struct EventModel: Codable {
     var phone: String?
     var date: String?
     var location1: String
-    var location2: String
-    
+    var location2: String    
     var image: UIImage?
     
     enum CodingKeys: String, CodingKey {
@@ -37,12 +36,24 @@ struct EventModel: Codable {
 
 extension Array where Element == EventModel {
     func save() throws {
-        
+        let fileURLWithPath = getFileURLWithPath()
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(self)
+        try data.write(to: fileURLWithPath)
     }
     
     func load() throws -> [EventModel] {
-        var items = [EventModel]()
-        
+        let fileURLWithPath = getFileURLWithPath()
+        let data = try Data(contentsOf: fileURLWithPath)
+        let decoder = JSONDecoder()
+        let items = try decoder.decode(Array<EventModel>.self, from: data)
         return items
+    }
+    
+    func getFileURLWithPath() -> URL {
+        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURLWithPath = URL.init(fileURLWithPath: "events", relativeTo: directoryURL)
+            .appendingPathExtension(".json")
+        return fileURLWithPath
     }
 }

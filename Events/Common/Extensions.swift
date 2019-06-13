@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+
 extension UIView {
     func fillsuperview() {
         guard let safeGuide = self.superview?.safeAreaLayoutGuide else { return }
@@ -18,3 +19,4 @@ extension UIView {
         self.bottomAnchor.constraint(equalTo: safeGuide.bottomAnchor).isActive = true
     }
 }
+

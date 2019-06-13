@@ -18,15 +18,16 @@ class ListCell: UICollectionViewCell {
         timestamp.text = item.date
         title.text = item.title
         location.text = item.location1
-        
-        //set background color with image if exist
+                
+        //set background image
         if let image = item.image {
-            backgroundColor = UIColor(patternImage: image)
+            backgroundView = UIImageView(image: image)
         }else {
+            backgroundView = UIImageView(image: #imageLiteral(resourceName: "placeholder_nomoon"))
             delegate?.loadImage(index: index, completion: { [weak self] (image) in
-                guard let bgImage = image else { return }
+                guard let image = image else { return }
                 DispatchQueue.main.async {
-                    self?.backgroundColor = UIColor(patternImage: bgImage)
+                    self?.backgroundView = UIImageView(image: image)
                 }
             })
         }

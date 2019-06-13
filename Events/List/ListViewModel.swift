@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-
 protocol LoadImageService {
     func loadImage(index: Int, completion: @escaping (UIImage?) -> Void)
 }
@@ -17,6 +16,9 @@ protocol LoadImageService {
 class ListViewModel: NSObject {
     var items: [EventModel]
     var eventService: EventService
+    var count: Int {
+        return items.count
+    }
     subscript(indexPath: IndexPath) -> EventModel {
         return items[indexPath.row]
     }
@@ -36,6 +38,7 @@ class ListViewModel: NSObject {
 }
 
 
+//MARK: load image
 extension ListViewModel: LoadImageService {
     func loadImage(index: Int, completion: @escaping (UIImage?) -> Void) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
