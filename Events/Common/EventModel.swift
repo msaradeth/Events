@@ -15,7 +15,7 @@ struct EventModel: Codable {
     var title: String
     var timestamp: String
     var imageUrl: String?
-    var phone: String
+    var phone: String?
     var date: String?
     var location1: String
     var location2: String

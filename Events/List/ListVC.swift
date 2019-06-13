@@ -15,9 +15,11 @@ class ListVC: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
         collectionView.register(UINib(nibName: "ListCell", bundle: nil), forCellWithReuseIdentifier: ListCell.cellIdentifier)
+        collectionView.dataSource = self
+        collectionView.delegate = self
         return collectionView
     }()
-    
+ 
     init(title: String, viewModel: ListViewModel) {
         self.viewModel = viewModel        
         super.init(nibName: nil, bundle: nil)
@@ -29,7 +31,9 @@ class ListVC: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         viewModel.loadData { [weak self] in
-            self?.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
         }
     }
     
@@ -45,7 +49,11 @@ class ListVC: UIViewController {
 }
 
 extension ListVC: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(viewModel.items.count)
         return viewModel.items.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -58,6 +66,14 @@ extension ListVC: UICollectionViewDataSource {
 extension ListVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+    }
+}
+
+extension ListVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+//         return CGSize(width: collectionView.bounds.width, height: 44)
+        return CGSize(width: 100, height: 100)
     }
 }
 

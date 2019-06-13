@@ -14,16 +14,13 @@ struct EventService {
     
     func loadData(completion: @escaping ([EventModel]) -> Void) {
         HttpHelp.request(urlString, method: .get, success: { (dataResponse) in
-            debugPrint(dataResponse)
             guard let data = dataResponse.data else { return }
             do {
                 let decoder = JSONDecoder()
                 let items = try decoder.decode(Array<EventModel>.self, from: data)
                 completion(items)
-                print(items)
             }catch let error {
                 print(error.localizedDescription)
-                fatalError()
             }
             
         }) { (error) in
