@@ -21,7 +21,11 @@ struct EventService {
     
     func loadFromDisk(completion: @escaping ([EventModel]) -> Void) {
         do {
-            let items = try [EventModel]().load()
+            var items = try [EventModel]().load()
+            items.enumerated().forEach({ (index, item) in
+                //Load images from disk
+                items[index].image = item.loadImage()
+            })
             completion(items)
         } catch let error {
             print(error.localizedDescription)

@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+let subDirectory = "PhunApp"
+
 struct EventModel: Codable {
     var id: Int
     var description: String
@@ -32,28 +34,52 @@ struct EventModel: Codable {
         case location1 = "locationline1"
         case location2 = "locationline2"
     }
+    
+
+
 }
 
-extension Array where Element == EventModel {
+//MARK: Save and load images
+extension EventModel: FileURLWithPathService {
+    func saveImage() {
+        guard let image = image else { return }
+        do {
+            let fileURLWithPath = getFileURLWithPath(filename: String(id), subDirectory: subDirectory)
+            let data = image.jpegData(compressionQuality: 1)
+            try data?.write(to: fileURLWithPath, options: .atomic)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func loadImage() -> UIImage? {
+        do {
+            let fileURLWithPath = getFileURLWithPath(filename: String(id), subDirectory: subDirectory)
+            let data = try Data(contentsOf: fileURLWithPath)
+            let image = UIImage(data: data)
+            return image
+        } catch let error {
+            print(error.localizedDescription)
+            return nil
+        }
+    }
+}
+
+
+//MARK: Save Array of Model
+extension Array: FileURLWithPathService where Element == EventModel {
     func save() throws {
-        let fileURLWithPath = getFileURLWithPath()
+        let fileURLWithPath = getFileURLWithPath(filename: "events", subDirectory: subDirectory)
         let encoder = JSONEncoder()
         let data = try encoder.encode(self)
-        try data.write(to: fileURLWithPath)
+        try data.write(to: fileURLWithPath, options: .atomic)
     }
     
     func load() throws -> [EventModel] {
-        let fileURLWithPath = getFileURLWithPath()
+        let fileURLWithPath = getFileURLWithPath(filename: "events", subDirectory: subDirectory)
         let data = try Data(contentsOf: fileURLWithPath)
         let decoder = JSONDecoder()
         let items = try decoder.decode(Array<EventModel>.self, from: data)
         return items
-    }
-    
-    func getFileURLWithPath() -> URL {
-        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let fileURLWithPath = URL.init(fileURLWithPath: "events", relativeTo: directoryURL)
-            .appendingPathExtension(".json")
-        return fileURLWithPath
     }
 }

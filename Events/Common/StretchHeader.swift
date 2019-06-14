@@ -44,7 +44,7 @@ class StretchHeader: UIImageView {
         if curHeight < minHeight {
             curHeight = minHeight
         }
-        self.heightConstraint.constant = curHeight
+        heightConstraint.constant = curHeight
         UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseIn, animations: {
             self.layoutIfNeeded()
         })

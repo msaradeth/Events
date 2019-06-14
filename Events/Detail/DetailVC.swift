@@ -123,8 +123,6 @@ extension DetailVC: UITableViewDataSource, UITableViewDelegate {
         cell.textLabel?.numberOfLines = 0
         return cell
     }
- 
-    
 }
 
 
@@ -136,7 +134,7 @@ extension DetailVC: UIScrollViewDelegate {
         view.layoutIfNeeded()
         
         //Animate Title
-        if curHeight < 65 {
+        if curHeight < 60 {
             self.moveTitleViewCenterTop()
         }else {
             self.moveTitleViewDownLeft()
@@ -154,10 +152,11 @@ extension DetailVC: UIScrollViewDelegate {
 //MARK: Animate title
 extension DetailVC {
     func moveTitleViewCenterTop() {
-        navigationController?.navigationBar.visible()
+        
         NSLayoutConstraint.deactivate([self.titleLeadingConstraint, self.titleTopConstraint])
         NSLayoutConstraint.activate([self.titleCenterXConstraint,  self.titleViewConstraint])
         UIView.animate(withDuration: 0.3, animations: {
+            self.navigationController?.navigationBar.visible()
             self.view.layoutIfNeeded()
         }) { (completion) in
             NSLayoutConstraint.deactivate([self.titleLeadingConstraint, self.titleTopConstraint])

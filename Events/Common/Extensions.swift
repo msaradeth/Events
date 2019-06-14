@@ -22,8 +22,6 @@ extension UINavigationBar {
     }
 }
 
-
-
 extension UIView {
     func fillsuperview() {
         guard let safeGuide = self.superview?.safeAreaLayoutGuide else { return }
@@ -34,13 +32,13 @@ extension UIView {
     }
 }
 
+
 extension String {
-    // Convert UTC (or GMT) to local time
+    //convert UTC GMT to local time       
     func toLocalTime() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-                
         if let date = dateFormatter.date(from: self) {
             dateFormatter.timeZone = TimeZone.current
             dateFormatter.dateFormat = "MMM d, yyyy h:mm a"

@@ -27,3 +27,32 @@ extension LoadImageService {
         }
     }
 }
+
+protocol FileURLWithPathService {
+    func getFileURLWithPath(filename: String, subDirectory: String) -> URL
+}
+extension FileURLWithPathService {
+    func getFileURLWithPath(filename: String, subDirectory: String) -> URL {
+        do {
+            var directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            if subDirectory.count > 0 {
+                directoryURL.appendPathComponent(subDirectory, isDirectory: true)
+                if !directoryExistsAtPath(directoryURL.path) {
+                    try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+                }
+            }
+            let fileURLWithPath = URL(fileURLWithPath: filename, relativeTo: directoryURL).appendingPathExtension("json")
+            return fileURLWithPath
+            
+        } catch let error {
+            print(error.localizedDescription)
+            return getFileURLWithPath(filename: filename, subDirectory: "")
+        }
+    }
+    
+    func directoryExistsAtPath(_ path: String) -> Bool {
+        var isDirectory = ObjCBool(true)
+        let exists = FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory)
+        return exists && isDirectory.boolValue
+    }
+}

@@ -37,8 +37,10 @@ class ListViewModel: NSObject, ListViewModelService {
     
     func loadImage(index: Int, completion: @escaping (UIImage?) -> Void) {
         loadImage(imageUrl: items[index].imageUrl) { [weak self] (image) in
-            self?.items[index].image = image
-            completion(image)            
+            guard let self = self else { return }
+            self.items[index].image = image
+            self.items[index].saveImage()
+            completion(image)
         }
     }
     
