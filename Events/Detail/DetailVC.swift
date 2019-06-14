@@ -66,7 +66,7 @@ class DetailVC: UIViewController {
         view.addSubview(dateLabel)
         dateLabel.topAnchor.constraint(equalTo: stretchHeader.bottomAnchor).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-        dateLabel.text = viewModel.item.date
+        dateLabel.text = viewModel.item.date?.toLocalTime()
     }
     
     func setupTitleLabel() {
@@ -89,8 +89,9 @@ class DetailVC: UIViewController {
     }
     
     @objc func share() {
-        print("share button")
-        
+        let activityViewController = UIActivityViewController(activityItems: [viewModel.item.description], applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
+        self.present(activityViewController, animated: true, completion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

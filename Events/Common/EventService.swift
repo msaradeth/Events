@@ -10,22 +10,27 @@ import Foundation
 
 
 struct EventService {
-    let urlString = "https://raw.githubusercontent.com/phunware-services/dev-interview-homework/master/feed.json"
     
     func loadData(completion: @escaping ([EventModel]) -> Void) {
-        guard Reachability.isConnectedToNetwork() else {
-            //No internet connection, load from storage
-            do {
-                let items = try [EventModel]().load()
-                print(items)
-                completion(items)
-            } catch let error {
-                print(error.localizedDescription)
-            }
-            return
+        if Reachability.isConnectedToNetwork() {
+            loadFromServer(completion: completion)
+        }else {
+            loadFromDisk(completion: completion)
         }
-        
-        //Has internet connection, load from server
+    }
+    
+    func loadFromDisk(completion: @escaping ([EventModel]) -> Void) {
+        do {
+            let items = try [EventModel]().load()
+            completion(items)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    
+    func loadFromServer(completion: @escaping ([EventModel]) -> Void) {
+        let urlString = "https://raw.githubusercontent.com/phunware-services/dev-interview-homework/master/feed.json"
         HttpHelp.request(urlString, method: .get, success: { (dataResponse) in
             guard let data = dataResponse.data else { return }
             do {
@@ -34,9 +39,8 @@ struct EventService {
                 try items.save()    //save to storage
                 completion(items)
             }catch let error {
-                print(error.localizedDescription)                
-            }
-            
+                print(error.localizedDescription)
+            }            
         }) { (error) in
             print(error.localizedDescription)
         }

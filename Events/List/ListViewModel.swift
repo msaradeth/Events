@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-protocol LoadImageService {
+protocol ListViewModelService: LoadImageService {
     func loadImage(index: Int, completion: @escaping (UIImage?) -> Void)
 }
 
-class ListViewModel: NSObject {
+class ListViewModel: NSObject, ListViewModelService {
     var items: [EventModel]
     var eventService: EventService
     var count: Int {
@@ -35,23 +35,15 @@ class ListViewModel: NSObject {
         }
     }
     
-}
-
-
-//MARK: load image
-extension ListViewModel: LoadImageService {
     func loadImage(index: Int, completion: @escaping (UIImage?) -> Void) {
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            guard let self = self,
-                let imageUrl = self.items[index].imageUrl,
-                let url = URL(string: imageUrl) else { return }
-            do {
-                let data = try Data(contentsOf: url)
-                self.items[index].image = UIImage(data: data)
-                completion(self.items[index].image )
-            }catch let error {
-                print(error.localizedDescription)
-            }
+        loadImage(imageUrl: items[index].imageUrl) { [weak self] (image) in
+            self?.items[index].image = image
+            completion(image)            
         }
     }
+    
+    deinit {
+        print("deinit:  ListViewModel")
+    }
+    
 }
