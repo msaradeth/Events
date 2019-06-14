@@ -15,7 +15,8 @@ class ListVC: UICollectionViewController {
     init(title: String, viewModel: ListViewModel) {
         self.viewModel = viewModel
         self.myTitle = title
-        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        super.init(collectionViewLayout: StretchyHeaderLayout())
+//        super.init(collectionViewLayout: UICollectionViewFlowLayout())
         self.collectionView.backgroundColor = .white
         self.collectionView.register(UINib(nibName: "ListCell", bundle: nil), forCellWithReuseIdentifier: ListCell.cellIdentifier)
     }

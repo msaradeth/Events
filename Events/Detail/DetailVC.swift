@@ -42,6 +42,9 @@ class DetailVC: UIViewController {
     var viewModel: DetailViewModel
     var stretchHeader: StretchHeader
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     init(viewModel: DetailViewModel, stretchHeader: StretchHeader) {
         self.viewModel = viewModel
@@ -50,12 +53,26 @@ class DetailVC: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareButtonAction))
 
         //setup subviews
+        DispatchQueue.main.async {
+            self.setupStretchHeaderView()
+            self.setupDateLabel()
+            self.setupTitleLabel()
+            self.setupTableView()
+        }
+        self.view.backgroundColor = .white
+    }
+    
+    func setupStretchHeaderView() {
+        //use Scrollview
+//        let navigationBar = navigationController!.navigationBar
+//        navigationBar.barColor = UIColor(red: 52 / 255, green: 152 / 255, blue: 219 / 255, alpha: 1)
+//        tableview.addScalableCover(with: viewModel.item.image!)
+//        tableview.addScalableCover(with: UIImage(named: "FullSizeRender.jpg")!)
+        
+        
+        //Use Images
         self.view.addSubview(self.stretchHeader)
         self.stretchHeader.anchorToSuperview()
-        self.setupDateLabel()
-        self.setupTitleLabel()
-        self.setupTableView()
-        self.view.backgroundColor = .white
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +88,7 @@ class DetailVC: UIViewController {
     func setupDateLabel() {
         view.addSubview(dateLabel)
         dateLabel.topAnchor.constraint(equalTo: stretchHeader.bottomAnchor).isActive = true
+//        dateLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50).isActive = true
         dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
         dateLabel.text = viewModel.item.date?.toLocalTime()
     }
@@ -132,7 +150,7 @@ extension DetailVC: UIScrollViewDelegate {
         let curHeight = stretchHeader.heightConstraint.constant - scrollView.contentOffset.y
         stretchHeader.stretch(height: curHeight)
         view.layoutIfNeeded()
-        
+
         //Animate Title
         if curHeight < 60 {
             self.moveTitleViewCenterTop()

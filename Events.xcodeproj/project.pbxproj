@@ -21,6 +21,10 @@
 		0EA3215C22B1FDE30086E874 /* ListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EA3215A22B1FDE30086E874 /* ListCell.xib */; };
 		0EA3215E22B202B20086E874 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA3215D22B202B20086E874 /* Extensions.swift */; };
 		0EE6EFF522B33CB800AA2058 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE6EFF422B33CB800AA2058 /* Protocols.swift */; };
+		5E2F05BA22B45BBA0054DBA5 /* StretchyHeaderLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2F05B922B45BBA0054DBA5 /* StretchyHeaderLayout.swift */; };
+		5E2F05C022B460AF0054DBA5 /* UIScrollView+ScalableCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2F05BE22B460AF0054DBA5 /* UIScrollView+ScalableCover.swift */; };
+		5E2F05C122B460AF0054DBA5 /* UINavigationBar+Alpha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2F05BF22B460AF0054DBA5 /* UINavigationBar+Alpha.swift */; };
+		5E2F05C722B46B6F0054DBA5 /* Extensions+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2F05C622B46B6F0054DBA5 /* Extensions+UIView.swift */; };
 		5EC45A4C22B2AE2900A00E3E /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC45A4B22B2AE2900A00E3E /* DetailVC.swift */; };
 		5EC45A4E22B2B74000A00E3E /* StretchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC45A4D22B2B74000A00E3E /* StretchHeader.swift */; };
 		5EC45A5022B2F39600A00E3E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC45A4F22B2F39600A00E3E /* Reachability.swift */; };
@@ -69,6 +73,13 @@
 		0EA3215D22B202B20086E874 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0EE6EFF422B33CB800AA2058 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		2F18277B450BC693CF47F54E /* Pods_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E2F05B922B45BBA0054DBA5 /* StretchyHeaderLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StretchyHeaderLayout.swift; sourceTree = "<group>"; };
+		5E2F05BE22B460AF0054DBA5 /* UIScrollView+ScalableCover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+ScalableCover.swift"; sourceTree = "<group>"; };
+		5E2F05BF22B460AF0054DBA5 /* UINavigationBar+Alpha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Alpha.swift"; sourceTree = "<group>"; };
+		5E2F05C322B46B350054DBA5 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		5E2F05C422B46B350054DBA5 /* StretchyHeaderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyHeaderController.swift; sourceTree = "<group>"; };
+		5E2F05C522B46B420054DBA5 /* StretchyHeaderLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyHeaderLayout.swift; sourceTree = "<group>"; };
+		5E2F05C622B46B6F0054DBA5 /* Extensions+UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extensions+UIView.swift"; sourceTree = "<group>"; };
 		5EC45A4B22B2AE2900A00E3E /* DetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		5EC45A4D22B2B74000A00E3E /* StretchHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchHeader.swift; sourceTree = "<group>"; };
 		5EC45A4F22B2F39600A00E3E /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -136,6 +147,7 @@
 		0EA3211B22B1DF4F0086E874 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				5E2F05BB22B460420054DBA5 /* StretchHeader */,
 				0EA3214B22B1DFA50086E874 /* List */,
 				5EC45A4A22B2AE1000A00E3E /* Detail */,
 				0EA3215022B1E05A0086E874 /* Common */,
@@ -209,6 +221,44 @@
 				78E9F51C1886214AFBCDFFAA /* Pods-EventsUITests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		5E2F05BB22B460420054DBA5 /* StretchHeader */ = {
+			isa = PBXGroup;
+			children = (
+				5E2F05C222B46B120054DBA5 /* CollectionView+Header */,
+				5E2F05BD22B4609C0054DBA5 /* ScrollView+Image */,
+				5E2F05BC22B460660054DBA5 /* UICollectionViewFlowLayout+Header */,
+			);
+			path = StretchHeader;
+			sourceTree = "<group>";
+		};
+		5E2F05BC22B460660054DBA5 /* UICollectionViewFlowLayout+Header */ = {
+			isa = PBXGroup;
+			children = (
+				5E2F05B922B45BBA0054DBA5 /* StretchyHeaderLayout.swift */,
+			);
+			path = "UICollectionViewFlowLayout+Header";
+			sourceTree = "<group>";
+		};
+		5E2F05BD22B4609C0054DBA5 /* ScrollView+Image */ = {
+			isa = PBXGroup;
+			children = (
+				5E2F05BF22B460AF0054DBA5 /* UINavigationBar+Alpha.swift */,
+				5E2F05BE22B460AF0054DBA5 /* UIScrollView+ScalableCover.swift */,
+			);
+			path = "ScrollView+Image";
+			sourceTree = "<group>";
+		};
+		5E2F05C222B46B120054DBA5 /* CollectionView+Header */ = {
+			isa = PBXGroup;
+			children = (
+				5E2F05C522B46B420054DBA5 /* StretchyHeaderLayout.swift */,
+				5E2F05C322B46B350054DBA5 /* HeaderView.swift */,
+				5E2F05C422B46B350054DBA5 /* StretchyHeaderController.swift */,
+				5E2F05C622B46B6F0054DBA5 /* Extensions+UIView.swift */,
+			);
+			path = "CollectionView+Header";
 			sourceTree = "<group>";
 		};
 		5EC45A4A22B2AE1000A00E3E /* Detail */ = {
@@ -460,13 +510,17 @@
 				0EA3215E22B202B20086E874 /* Extensions.swift in Sources */,
 				0EA3214D22B1E03B0086E874 /* ListVC.swift in Sources */,
 				0EA3214F22B1E0530086E874 /* ListViewModel.swift in Sources */,
+				5E2F05C722B46B6F0054DBA5 /* Extensions+UIView.swift in Sources */,
 				0EA3215222B1F0690086E874 /* EventService.swift in Sources */,
 				5EC45A4C22B2AE2900A00E3E /* DetailVC.swift in Sources */,
 				5EC45A4E22B2B74000A00E3E /* StretchHeader.swift in Sources */,
 				5EC45A5222B30B4B00A00E3E /* DetailViewModel.swift in Sources */,
 				5EC45A5022B2F39600A00E3E /* Reachability.swift in Sources */,
 				0EE6EFF522B33CB800AA2058 /* Protocols.swift in Sources */,
+				5E2F05C122B460AF0054DBA5 /* UINavigationBar+Alpha.swift in Sources */,
+				5E2F05BA22B45BBA0054DBA5 /* StretchyHeaderLayout.swift in Sources */,
 				0EA3215B22B1FDE30086E874 /* ListCell.swift in Sources */,
+				5E2F05C022B460AF0054DBA5 /* UIScrollView+ScalableCover.swift in Sources */,
 				0EA3215622B1F0D40086E874 /* EventModel.swift in Sources */,
 				0EA3211D22B1DF4F0086E874 /* AppDelegate.swift in Sources */,
 			);
