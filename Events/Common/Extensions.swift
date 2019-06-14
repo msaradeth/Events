@@ -11,6 +11,19 @@ import UIKit
 import MessageUI
 
 
+extension UINavigationBar {
+    func transparent() {
+        setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        shadowImage = UIImage()
+    }
+    func visible() {
+        setBackgroundImage(nil, for: .default)
+        shadowImage = nil
+    }
+}
+
+
+
 extension UIView {
     func fillsuperview() {
         guard let safeGuide = self.superview?.safeAreaLayoutGuide else { return }

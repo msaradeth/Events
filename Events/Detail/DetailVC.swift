@@ -35,12 +35,6 @@ class DetailVC: UIViewController {
         tableview.delegate = self
         return tableview
     }()
-    lazy var menuView: MenuView = {
-        let menuView = MenuView(frame: .zero)
-        menuView.translatesAutoresizingMaskIntoConstraints = false
-        menuView.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        return menuView
-    }()
     var titleTopConstraint: NSLayoutConstraint!
     var titleLeadingConstraint: NSLayoutConstraint!
     var titleCenterXConstraint: NSLayoutConstraint!
@@ -66,11 +60,12 @@ class DetailVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.alpha = 0.3
+        self.navigationController?.navigationBar.transparent()
+//        self.navigationItem.titleView = titleLabel
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.alpha = 1
+        self.navigationController?.navigationBar.visible()
     }
     
 
@@ -90,7 +85,7 @@ class DetailVC: UIViewController {
         
         titleViewConstraint = titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50)
         titleCenterXConstraint =  titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        NSLayoutConstraint.activate([titleTopConstraint, titleLeadingConstraint])
+        NSLayoutConstraint.activate([titleLeadingConstraint, titleTopConstraint, titleTopConstraint])
     }
 
     func setupTableView() {
@@ -130,23 +125,57 @@ extension DetailVC: UITableViewDataSource, UITableViewDelegate {
     
 }
 
+
 extension DetailVC: UIScrollViewDelegate {
+    func moveTitleViewCenterTop() {
+        NSLayoutConstraint.deactivate([titleLeadingConstraint, titleTopConstraint])
+        NSLayoutConstraint.deactivate([titleCenterXConstraint,  titleViewConstraint])
+//        NSLayoutConstraint.activate([titleCenterXConstraint, titleViewConstraint])
+        navigationController?.navigationBar.visible()
+        if navigationItem.titleView != titleLabel {
+            navigationItem.titleView = titleLabel
+        }
+//        navigationItem.titleView = titleLabel
+//        navigationItem.titleView?.addSubview(titleLabel)
+        
+//        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
+//        let titleLabel = UILabel(frame: titleView.frame)
+//        titleLabel.text = viewModel.item.title
+//        titleView.addSubview(titleLabel)
+//        navigationItem.titleView = titleView
+    }
+    
+    func moveTitleViewDownLeft() {
+        if navigationItem.titleView == titleLabel {
+            titleLabel.removeFromSuperview()
+        }
+//
+        NSLayoutConstraint.deactivate([titleCenterXConstraint,  titleViewConstraint])
+        NSLayoutConstraint.activate([titleLeadingConstraint, titleTopConstraint])
+        navigationController?.navigationBar.transparent()
+        
+//        let titleView = UIView(frame: CGRect(x: 200, y: 400, width: 100, height: 40))
+//        let titleLabel = UILabel(frame: titleView.frame)
+//        titleLabel.text = viewModel.item.title
+//        titleView.addSubview(titleLabel)
+//        navigationItem.titleView = titleLabel
+    }
+    
+
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let curHeight = stretchHeader.heightConstraint.constant - scrollView.contentOffset.y
         stretchHeader.stretch(height: curHeight)
-        self.view.layoutIfNeeded()
+        view.layoutIfNeeded()
         
         //Animate Title
-        if curHeight < 100 {
-            NSLayoutConstraint.deactivate([self.titleLeadingConstraint, self.titleTopConstraint])
-            NSLayoutConstraint.activate([self.titleCenterXConstraint, self.titleViewConstraint])
-            self.navigationController?.navigationBar.alpha = 0
-        }else {
-            NSLayoutConstraint.deactivate([self.titleCenterXConstraint,  self.titleViewConstraint])
-            NSLayoutConstraint.activate([self.titleTopConstraint, self.titleLeadingConstraint])
-            self.navigationController?.navigationBar.alpha = 0.5
-        }
+
         UIView.animate(withDuration: 0.9) {
+            if curHeight < 100 {
+                self.moveTitleViewCenterTop()
+            }else {
+                self.moveTitleViewDownLeft()
+            }
             self.view.layoutIfNeeded()
         }
     }
