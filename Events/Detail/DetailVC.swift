@@ -61,15 +61,13 @@ class DetailVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.transparent()
-//        self.navigationItem.titleView = titleLabel
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.navigationBar.visible()
     }
     
-
-    
+    //MARK: setup subviews
     func setupDateLabel() {
         view.addSubview(dateLabel)
         dateLabel.topAnchor.constraint(equalTo: stretchHeader.bottomAnchor).isActive = true
@@ -96,6 +94,8 @@ class DetailVC: UIViewController {
         tableview.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    
+    //MARK: Button actions
     @objc func backButtonAction() {
         self.navigationController?.popViewController(animated: true)
     }
@@ -110,6 +110,8 @@ class DetailVC: UIViewController {
     }
 }
 
+
+//MARK: display description using tableview
 extension DetailVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -126,57 +128,18 @@ extension DetailVC: UITableViewDataSource, UITableViewDelegate {
 }
 
 
+//MARK: UIScrollViewDelegate
 extension DetailVC: UIScrollViewDelegate {
-    func moveTitleViewCenterTop() {
-        NSLayoutConstraint.deactivate([titleLeadingConstraint, titleTopConstraint])
-        NSLayoutConstraint.deactivate([titleCenterXConstraint,  titleViewConstraint])
-//        NSLayoutConstraint.activate([titleCenterXConstraint, titleViewConstraint])
-        navigationController?.navigationBar.visible()
-        if navigationItem.titleView != titleLabel {
-            navigationItem.titleView = titleLabel
-        }
-//        navigationItem.titleView = titleLabel
-//        navigationItem.titleView?.addSubview(titleLabel)
-        
-//        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
-//        let titleLabel = UILabel(frame: titleView.frame)
-//        titleLabel.text = viewModel.item.title
-//        titleView.addSubview(titleLabel)
-//        navigationItem.titleView = titleView
-    }
-    
-    func moveTitleViewDownLeft() {
-        if navigationItem.titleView == titleLabel {
-            titleLabel.removeFromSuperview()
-        }
-//
-        NSLayoutConstraint.deactivate([titleCenterXConstraint,  titleViewConstraint])
-        NSLayoutConstraint.activate([titleLeadingConstraint, titleTopConstraint])
-        navigationController?.navigationBar.transparent()
-        
-//        let titleView = UIView(frame: CGRect(x: 200, y: 400, width: 100, height: 40))
-//        let titleLabel = UILabel(frame: titleView.frame)
-//        titleLabel.text = viewModel.item.title
-//        titleView.addSubview(titleLabel)
-//        navigationItem.titleView = titleLabel
-    }
-    
-
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let curHeight = stretchHeader.heightConstraint.constant - scrollView.contentOffset.y
         stretchHeader.stretch(height: curHeight)
         view.layoutIfNeeded()
         
         //Animate Title
-
-        UIView.animate(withDuration: 0.9) {
-            if curHeight < 100 {
-                self.moveTitleViewCenterTop()
-            }else {
-                self.moveTitleViewDownLeft()
-            }
-            self.view.layoutIfNeeded()
+        if curHeight < 65 {
+            self.moveTitleViewCenterTop()
+        }else {
+            self.moveTitleViewDownLeft()
         }
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -186,3 +149,44 @@ extension DetailVC: UIScrollViewDelegate {
         stretchHeader.setDefaulHeight(scrollView: scrollView)
     }
 }
+
+
+//MARK: Animate title
+extension DetailVC {
+    func moveTitleViewCenterTop() {
+        navigationController?.navigationBar.visible()
+        NSLayoutConstraint.deactivate([self.titleLeadingConstraint, self.titleTopConstraint])
+        NSLayoutConstraint.activate([self.titleCenterXConstraint,  self.titleViewConstraint])
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.layoutIfNeeded()
+        }) { (completion) in
+            NSLayoutConstraint.deactivate([self.titleLeadingConstraint, self.titleTopConstraint])
+            NSLayoutConstraint.deactivate([self.titleCenterXConstraint,  self.titleViewConstraint])
+            UIView.animate(withDuration: 1, animations: {
+                if self.navigationItem.titleView != self.titleLabel {
+                    if self.titleLabel.superview == self.view {
+                        self.titleLabel.removeFromSuperview()
+                    }
+                    self.navigationItem.titleView = self.titleLabel
+                }
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
+    func moveTitleViewDownLeft() {
+        if navigationItem.titleView == titleLabel {
+            navigationItem.titleView = nil
+            view.addSubview(titleLabel)
+        }
+        NSLayoutConstraint.deactivate([titleCenterXConstraint])
+        NSLayoutConstraint.activate([titleLeadingConstraint, titleTopConstraint])
+        navigationController?.navigationBar.transparent()
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+}
+
