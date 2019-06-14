@@ -82,7 +82,7 @@ class DetailVC: UIViewController {
 
     func setupTableView() {
         view.addSubview(tableview)
-        tableview.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 60).isActive = true
+        tableview.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 30).isActive = true
         tableview.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableview.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableview.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -116,39 +116,26 @@ extension DetailVC: UITableViewDataSource, UITableViewDelegate {
 
 extension DetailVC: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        stretchHeader.stretch(scrollview: scrollView, navigationItem: navigationItem)
-        
         let curHeight = stretchHeader.heightConstraint.constant - scrollView.contentOffset.y
-        stretchHeader.heightConstraint.constant = curHeight
+        stretchHeader.stretch(height: curHeight)
         self.view.layoutIfNeeded()
         
-        print("curHeight:", curHeight)
-//        if curHeight < 200 {
-//            let titleView = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 40)))
-//            titleView.text = viewModel.item.title
-//            titleView.font = UIFont.systemFont(ofSize: 21, weight: .medium)
-//            navigationItem.titleView = titleView
-//            titleLabel.isHidden = true
-//        }else {
-//            navigationItem.titleView = nil
-//            titleLabel.isHidden = false
-//        }
-        
+        //Animate Title
+        if curHeight < 100 {
+            NSLayoutConstraint.deactivate([self.titleLeadingConstraint, self.titleTopConstraint])
+            NSLayoutConstraint.activate([self.titleCenterXConstraint, self.titleViewConstraint])
+        }else {
+            NSLayoutConstraint.deactivate([self.titleCenterXConstraint,  self.titleViewConstraint])
+            NSLayoutConstraint.activate([self.titleTopConstraint, self.titleLeadingConstraint])
+        }
         UIView.animate(withDuration: 0.6) {
-            if curHeight < 100 {
-                NSLayoutConstraint.deactivate([self.titleLeadingConstraint, self.titleTopConstraint])
-                NSLayoutConstraint.activate([self.titleCenterXConstraint, self.titleViewConstraint])
-            }else {
-                NSLayoutConstraint.deactivate([self.titleCenterXConstraint,  self.titleViewConstraint])
-                NSLayoutConstraint.activate([self.titleTopConstraint, self.titleLeadingConstraint])
-            }
             self.view.layoutIfNeeded()
         }
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        stretchHeader.setHeight(scrollView: scrollView)
+        stretchHeader.setDefaulHeight(scrollView: scrollView)
     }
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        stretchHeader.setHeight(scrollView: scrollView)
+        stretchHeader.setDefaulHeight(scrollView: scrollView)
     }
 }

@@ -10,12 +10,15 @@ import UIKit
 
 class StretchHeader: UIImageView {
     var maxHeight: CGFloat
+    var minHeight: CGFloat
     var heightConstraint: NSLayoutConstraint!
     
-    init(image: UIImage?, maxHeight: CGFloat) {
+    init(image: UIImage?, maxHeight: CGFloat, minHeight: CGFloat) {
         self.maxHeight = maxHeight
+        self.minHeight = minHeight
         super.init(frame: .zero)
         self.image = image
+        self.clipsToBounds = true
     }
 
     func anchorToSuperview() {
@@ -29,22 +32,20 @@ class StretchHeader: UIImageView {
         NSLayoutConstraint.activate([heightConstraint])
     }
     
-    func stretch(scrollview: UIScrollView) {
-        let curHeight = heightConstraint.constant - scrollview.contentOffset.y
-        heightConstraint.constant = curHeight        
+    func stretch(height: CGFloat) {
+        heightConstraint.constant = height
     }
     
-    func setHeight(scrollView: UIScrollView) {
+    func setDefaulHeight(scrollView: UIScrollView) {
         var curHeight = heightConstraint.constant - scrollView.contentOffset.y
         if curHeight > maxHeight {
             curHeight = maxHeight
         }
-        if curHeight < 0 {
-            curHeight = 0
+        if curHeight < minHeight {
+            curHeight = minHeight
         }
-
-        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseIn, animations: {
-            self.heightConstraint.constant = curHeight
+        self.heightConstraint.constant = curHeight
+        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseIn, animations: {            
             self.layoutIfNeeded()
         })
     }
