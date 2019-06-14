@@ -33,7 +33,7 @@ class StretchHeader: UIImageView {
     }
     
     func stretch(height: CGFloat) {
-        heightConstraint.constant = height
+        heightConstraint.constant = height < minHeight ? minHeight : height
     }
     
     func setDefaulHeight(scrollView: UIScrollView) {
@@ -45,7 +45,7 @@ class StretchHeader: UIImageView {
             curHeight = minHeight
         }
         self.heightConstraint.constant = curHeight
-        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseIn, animations: {            
+        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseIn, animations: {
             self.layoutIfNeeded()
         })
     }

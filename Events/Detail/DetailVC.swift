@@ -10,8 +10,6 @@ import UIKit
 import MessageUI
 
 class DetailVC: UIViewController {
-    var viewModel: DetailViewModel
-    var stretchHeader: StretchHeader
     lazy var dateLabel: UILabel = {
         let dateLabel = UILabel()
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -37,19 +35,27 @@ class DetailVC: UIViewController {
         tableview.delegate = self
         return tableview
     }()
+    lazy var menuView: MenuView = {
+        let menuView = MenuView(frame: .zero)
+        menuView.translatesAutoresizingMaskIntoConstraints = false
+        menuView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        return menuView
+    }()
     var titleTopConstraint: NSLayoutConstraint!
     var titleLeadingConstraint: NSLayoutConstraint!
     var titleCenterXConstraint: NSLayoutConstraint!
     var titleViewConstraint: NSLayoutConstraint!
+    var viewModel: DetailViewModel
+    var stretchHeader: StretchHeader
     
     
     init(viewModel: DetailViewModel, stretchHeader: StretchHeader) {
         self.viewModel = viewModel
         self.stretchHeader = stretchHeader
         super.init(nibName: nil, bundle: nil)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareButtonAction))
 
-        //setup subview
+        //setup subviews
         self.view.addSubview(self.stretchHeader)
         self.stretchHeader.anchorToSuperview()
         self.setupDateLabel()
@@ -58,9 +64,16 @@ class DetailVC: UIViewController {
         self.view.backgroundColor = .white
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.alpha = 0.3
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.alpha = 1
+    }
+    
+
     
     func setupDateLabel() {
         view.addSubview(dateLabel)
@@ -75,7 +88,7 @@ class DetailVC: UIViewController {
         titleTopConstraint = titleLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor)
         titleLeadingConstraint =  titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         
-        titleViewConstraint = titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: -40)
+        titleViewConstraint = titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 50)
         titleCenterXConstraint =  titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         NSLayoutConstraint.activate([titleTopConstraint, titleLeadingConstraint])
     }
@@ -88,7 +101,10 @@ class DetailVC: UIViewController {
         tableview.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    @objc func share() {
+    @objc func backButtonAction() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    @objc func shareButtonAction() {
         let activityViewController = UIActivityViewController(activityItems: [viewModel.item.description], applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = self.view
         self.present(activityViewController, animated: true, completion: nil)
@@ -124,11 +140,13 @@ extension DetailVC: UIScrollViewDelegate {
         if curHeight < 100 {
             NSLayoutConstraint.deactivate([self.titleLeadingConstraint, self.titleTopConstraint])
             NSLayoutConstraint.activate([self.titleCenterXConstraint, self.titleViewConstraint])
+            self.navigationController?.navigationBar.alpha = 0
         }else {
             NSLayoutConstraint.deactivate([self.titleCenterXConstraint,  self.titleViewConstraint])
             NSLayoutConstraint.activate([self.titleTopConstraint, self.titleLeadingConstraint])
+            self.navigationController?.navigationBar.alpha = 0.5
         }
-        UIView.animate(withDuration: 0.6) {
+        UIView.animate(withDuration: 0.9) {
             self.view.layoutIfNeeded()
         }
     }

@@ -59,7 +59,7 @@ extension ListVC {
         collectionView.deselectItem(at: indexPath, animated: true)
         let item = viewModel[indexPath]
         let image = item.image ?? UIImage(named: "placeholder_nomoon")
-        let stretchHeader = StretchHeader(image: image, maxHeight: 300, minHeight: 0)
+        let stretchHeader = StretchHeader(image: image, maxHeight: 300, minHeight: 90)
         let detailViewModel = DetailViewModel(item: item)
         let detailVC = DetailVC(viewModel: detailViewModel, stretchHeader: stretchHeader)
         self.title = ""
