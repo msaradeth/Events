@@ -15,20 +15,18 @@ class ListVC: UICollectionViewController {
     init(title: String, viewModel: ListViewModel) {
         self.viewModel = viewModel
         self.myTitle = title
-//        super.init(collectionViewLayout: StretchyHeaderLayout())
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        
         self.collectionView.backgroundColor = .white
         self.collectionView.register(UINib(nibName: "ListCell", bundle: nil), forCellWithReuseIdentifier: ListCell.cellIdentifier)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
         viewModel.loadData { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
             }
         }
     }
+
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = myTitle
@@ -58,24 +56,8 @@ extension ListVC {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        var item = viewModel[indexPath]
-
-//        item.image = item.image ?? UIImage(named: "placeholder_nomoon")
-//        let detailVC = DetailVCFrame(event: item)
-//        self.navigationController?.pushViewController(detailVC, animated: true)
-        
-        item.image = item.image ?? UIImage(named: "placeholder_nomoon")
-        let detailVC = DetailVCConstraints(event: item)
+        let detailVC = DetailVCConstraints(event: viewModel[indexPath], delegate: viewModel)
         self.navigationController?.pushViewController(detailVC, animated: true)
-        
-        
-        //        let image = item.image ?? UIImage(named: "placeholder_nomoon")
-        //        let stretchHeader = StretchHeader(image: image, maxHeight: 300, minHeight: -20)
-        //        let detailViewModel = DetailViewModel(item: item)
-        //        let detailVC = DetailVC(viewModel: detailViewModel, stretchHeader: stretchHeader)
-        //        self.title = ""
-        //        self.navigationController?.pushViewController(detailVC, animated: true)
-        
     }
     
 }

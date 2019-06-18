@@ -22,53 +22,61 @@ class DetailVCConstraints: UIViewController {
         scrollView.backgroundColor = .white
         return scrollView
     }()
-    let stackView: UIStackView = {
+    lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         return stackView
     }()
-    let headerImage: UIImageView = {
+    lazy var headerImage: UIImageView = {
         let headerImage = UIImageView(frame: .zero)
         headerImage.translatesAutoresizingMaskIntoConstraints = false
         headerImage.clipsToBounds = true
         headerImage.contentMode = UIView.ContentMode.scaleToFill    //.scaleAspectFill
         return headerImage
     }()
-    let dateLabel: UILabel = {
+    lazy var dateLabel: UILabel = {
         let dateLabel = UILabel()
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         dateLabel.font = UIFont.systemFont(ofSize: 21, weight: .bold)
         return dateLabel
     }()
-    let descriptionLabel: UILabel = {
+    lazy var descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.sizeToFit()
         descriptionLabel.numberOfLines = 0
         return descriptionLabel
     }()
-    let labelStackView: UIStackView = {
+    lazy var labelStackView: UIStackView = {
         let labelStackView = UIStackView()
         labelStackView.translatesAutoresizingMaskIntoConstraints = false
         labelStackView.axis = .vertical
         labelStackView.isLayoutMarginsRelativeArrangement = true
         labelStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         return labelStackView
-    }()
+    }()    
+    fileprivate let defaultHeight: CGFloat = 300
     var event: EventModel
-    let defaultHeight: CGFloat = 300
     
-    init(event: EventModel) {
+    init(event: EventModel, delegate: ListViewModelService?) {
         self.event = event
         super.init(nibName: nil, bundle: nil)
         
         view.backgroundColor = .white
-        headerImage.image = event.image
         dateLabel.text = event.date?.toLocalTime()
         descriptionLabel.text = event.description
-        
+        if let image = event.image {
+            headerImage.image = image
+        }else {
+            headerImage.image = UIImage(named: "placeholder_nomoon")
+            delegate?.loadImage(imageUrl: event.imageUrl, completion: { [weak self] (image) in
+                DispatchQueue.main.async {
+                    self?.headerImage.image = image ?? UIImage(named: "placeholder_nomoon")
+                }
+            })
+        }
         setupViews()
     }
     
@@ -94,7 +102,6 @@ class DetailVCConstraints: UIViewController {
         
         //set Height of image and label
         headerImage.heightAnchor.constraint(equalToConstant: defaultHeight).isActive = true
-        descriptionLabel.heightAnchor.constraint(equalToConstant: descriptionLabel.getHeight(width: labelStackView.bounds.width))
     }
     
     required init?(coder aDecoder: NSCoder) {

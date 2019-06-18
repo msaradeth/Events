@@ -38,8 +38,8 @@ class DetailVCFrame: UIViewController {
         descriptionLabel.numberOfLines = 0
         return descriptionLabel
     }()
+    fileprivate let defaultHeight: CGFloat = 300
     var event: EventModel
-    let defaultHeight: CGFloat = 300
 
     init(event: EventModel) {
         self.event = event

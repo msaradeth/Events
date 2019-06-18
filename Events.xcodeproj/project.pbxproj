@@ -219,7 +219,8 @@
 			isa = PBXGroup;
 			children = (
 				0EEC140F22B7C47100336453 /* DetailVCFrame.swift */,
-				0EED363F22B8A4A800703C81 /* DetailVCConstraints.swift */,
+				5EC45A4B22B2AE2900A00E3E /* DetailVC.swift */,
+				5EC45A5122B30B4B00A00E3E /* DetailViewModel.swift */,
 			);
 			path = ScrollView;
 			sourceTree = "<group>";
@@ -278,8 +279,7 @@
 		5EC45A4A22B2AE1000A00E3E /* Detail */ = {
 			isa = PBXGroup;
 			children = (
-				5EC45A4B22B2AE2900A00E3E /* DetailVC.swift */,
-				5EC45A5122B30B4B00A00E3E /* DetailViewModel.swift */,
+				0EED363F22B8A4A800703C81 /* DetailVCConstraints.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
