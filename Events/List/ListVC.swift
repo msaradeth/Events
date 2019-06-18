@@ -59,17 +59,23 @@ extension ListVC {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         var item = viewModel[indexPath]
-        
-//        let image = item.image ?? UIImage(named: "placeholder_nomoon")
-//        let stretchHeader = StretchHeader(image: image, maxHeight: 300, minHeight: -20)
-//        let detailViewModel = DetailViewModel(item: item)
-//        let detailVC = DetailVC(viewModel: detailViewModel, stretchHeader: stretchHeader)
-//        self.title = ""
+
+//        item.image = item.image ?? UIImage(named: "placeholder_nomoon")
+//        let detailVC = DetailVCFrame(event: item)
 //        self.navigationController?.pushViewController(detailVC, animated: true)
         
         item.image = item.image ?? UIImage(named: "placeholder_nomoon")
-        let detailVC = DetailVCFrame(event: item)
+        let detailVC = DetailVCConstraints(event: item)
         self.navigationController?.pushViewController(detailVC, animated: true)
+        
+        
+        //        let image = item.image ?? UIImage(named: "placeholder_nomoon")
+        //        let stretchHeader = StretchHeader(image: image, maxHeight: 300, minHeight: -20)
+        //        let detailViewModel = DetailViewModel(item: item)
+        //        let detailVC = DetailVC(viewModel: detailViewModel, stretchHeader: stretchHeader)
+        //        self.title = ""
+        //        self.navigationController?.pushViewController(detailVC, animated: true)
+        
     }
     
 }

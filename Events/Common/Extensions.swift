@@ -23,13 +23,24 @@ extension UINavigationBar {
 }
 
 extension UIView {
-    func fillsuperview() {
+
+    func fillsuperview(padding: UIEdgeInsets? = .zero) {
         guard let safeGuide = self.superview?.safeAreaLayoutGuide else { return }
-        self.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
-        self.leadingAnchor.constraint(equalTo: safeGuide.leadingAnchor).isActive = true
-        self.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor).isActive = true
-        self.bottomAnchor.constraint(equalTo: safeGuide.bottomAnchor).isActive = true
+        let padding = padding ?? .zero
+        self.topAnchor.constraint(equalTo: safeGuide.topAnchor, constant: padding.top).isActive = true
+        self.leadingAnchor.constraint(equalTo: safeGuide.leadingAnchor, constant: padding.left).isActive = true
+        self.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor, constant: padding.right).isActive = true
+        self.bottomAnchor.constraint(equalTo: safeGuide.bottomAnchor, constant: padding.bottom).isActive = true
     }
+    
+    //    func fillsuperview() {
+    //        guard let safeGuide = self.superview?.safeAreaLayoutGuide else { return }
+    //        self.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
+    //        self.leadingAnchor.constraint(equalTo: safeGuide.leadingAnchor).isActive = true
+    //        self.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor).isActive = true
+    //        self.bottomAnchor.constraint(equalTo: safeGuide.bottomAnchor).isActive = true
+    //    }
+    
 }
 
 

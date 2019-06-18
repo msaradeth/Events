@@ -26,14 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-
+    
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .all
-//            return [.portrait, .portraitUpsideDown]
-        }else {
-            return .all
-        }
+        return UIDevice.current.userInterfaceIdiom == .pad ? .all : .all    //[.portrait, .portraitUpsideDown]
     }
 
 }

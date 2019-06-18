@@ -16,22 +16,21 @@ class DetailVCConstraints: UIViewController {
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        //        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.delegate = self
-        scrollView.bounces = true
+        scrollView.alwaysBounceVertical = true
         scrollView.backgroundColor = .white
         return scrollView
     }()
     let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.distribution = UIStackView.Distribution.fillProportionally
         stackView.axis = .vertical
         return stackView
     }()
     let headerImage: UIImageView = {
         let headerImage = UIImageView(frame: .zero)
-        //        headerImage.translatesAutoresizingMaskIntoConstraints = false
+        headerImage.translatesAutoresizingMaskIntoConstraints = false
         headerImage.clipsToBounds = true
         headerImage.contentMode = UIView.ContentMode.scaleToFill    //.scaleAspectFill
         return headerImage
@@ -40,7 +39,7 @@ class DetailVCConstraints: UIViewController {
         let dateLabel = UILabel()
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
+        dateLabel.font = UIFont.systemFont(ofSize: 21, weight: .bold)
         return dateLabel
     }()
     let descriptionLabel: UILabel = {
@@ -56,87 +55,38 @@ class DetailVCConstraints: UIViewController {
     
     init(event: EventModel) {
         self.event = event
-        self.headerHeightConstraint = headerImage.heightAnchor.constraint(equalToConstant: defaultHeight)
+        headerHeightConstraint = headerImage.heightAnchor.constraint(equalToConstant: defaultHeight)
+        NSLayoutConstraint.activate([headerHeightConstraint])
         super.init(nibName: nil, bundle: nil)
+        
         view.backgroundColor = .white
         headerImage.image = event.image
         dateLabel.text = event.date?.toLocalTime()
-        descriptionLabel.text = text
+        descriptionLabel.text = event.description
         
+        setupViews()
     }
-    
-    let headerView = UIImageView()
-    let footerView = UIView()
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        setupSubviews()
-    }
-    
-    func setupSubviews() {
+
+    func setupViews() {
+        //Add scrollveiw to mainview
         view.addSubview(scrollView)
+        scrollView.fillSuperview()
+        
+        //stackview to scrollview - auto dynamic contentsize
         scrollView.addSubview(stackView)
+        stackView.fillSuperview()
+        stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         
-        scrollView.frame = view.frame
-        //        stackView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 2000)
-        
-        headerImage.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: defaultHeight)
-        //        dateLabel.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: 40)
-        //        descriptionLabel.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: 500)
-        
-        //        let height = headerImage.bounds.height + dateLabel.bounds.height + descriptionLabel.bounds.height
-        //        let contentHeight = height > view.bounds.height ? height : view.frame.height
-        //        scrollView.contentSize = CGSize(width: scrollView.bounds.width , height: stackView.frame.height)
-        
-        scrollView.autoresizingMask = [.flexibleWidth]
-        stackView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        //        headerImage.autoresizingMask = [.flexibleWidth]
-        //        dateLabel.autoresizingMask = [.flexibleWidth]
-        //        descriptionLabel.autoresizingMask = [.flexibleWidth]
-        
+        //Add views to stackview
         stackView.addArrangedSubview(headerImage)
         stackView.addArrangedSubview(dateLabel)
         stackView.addArrangedSubview(descriptionLabel)
-        stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        stackView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        print(stackView.frame.height)
-        print(stackView.frame.width)
         
-        scrollView.contentSize = CGSize(width: scrollView.bounds.width , height: 2000)
-        
-        
+        //Set description length
+        descriptionLabel.heightAnchor.constraint(equalToConstant: descriptionLabel.getHeight(width: stackView.bounds.width))
         view.layoutIfNeeded()
     }
     
-    func setupSubviews2() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(headerImage)
-        scrollView.addSubview(dateLabel)
-        scrollView.addSubview(descriptionLabel)
-        
-        scrollView.frame = view.frame
-        headerImage.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: defaultHeight)
-        dateLabel.frame = CGRect(x: 0, y: headerImage.frame.maxY, width: scrollView.frame.width, height: 40)
-        
-        descriptionLabel.text = text
-        descriptionLabel.numberOfLines = 0
-        descriptionLabel.sizeToFit()
-        print(descriptionLabel.frame.height)
-        let labelHeight = descriptionLabel.frame.height
-        descriptionLabel.frame = CGRect(x: 0, y: dateLabel.frame.maxY, width: scrollView.frame.width, height: 500)
-        
-        let height = headerImage.bounds.height + dateLabel.bounds.height + descriptionLabel.bounds.height
-        let contentHeight = height > view.bounds.height ? height : view.frame.height
-        scrollView.contentSize = CGSize(width: scrollView.bounds.width , height: 2000)
-        
-        scrollView.autoresizingMask = [.flexibleWidth]
-        headerImage.autoresizingMask = [.flexibleWidth]
-        dateLabel.autoresizingMask = [.flexibleWidth]
-        descriptionLabel.autoresizingMask = [.flexibleWidth]
-        
-        view.layoutIfNeeded()
-    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -155,19 +105,4 @@ extension DetailVCConstraints: UIScrollViewDelegate {
         }
     }
 }
-
-
-//extension UILabel {
-//    func heightForLabel(text:String, font:UIFont, width:CGFloat) -> CGFloat {
-//        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
-//        label.numberOfLines = 0
-//        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-//        label.font = font
-//        label.text = text
-//        
-//        label.sizeToFit()
-//        return label.frame.height
-//    }
-    
-//}
 

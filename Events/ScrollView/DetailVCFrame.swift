@@ -51,19 +51,17 @@ class DetailVCFrame: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setupSubviews()
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceRotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+        setupViews()
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
     }
-    
-    @objc func deviceRotated(){
-        setupSubviews()
+    @objc func orientationDidChange() {
+        setupViews()
     }
-    
 
-    func setupSubviews() {
+    func setupViews() {
         view.addSubview(scrollView)
         scrollView.addSubview(headerImage)
         scrollView.addSubview(dateLabel)
@@ -71,19 +69,19 @@ class DetailVCFrame: UIViewController {
         
         scrollView.frame = view.frame
         headerImage.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: defaultHeight)
-        dateLabel.frame = CGRect(x: 0, y: headerImage.frame.maxY, width: scrollView.frame.width, height: 40)
+        dateLabel.frame = CGRect(x: 8, y: headerImage.frame.maxY, width: scrollView.frame.width, height: 40)
         
-        let labelHeight = descriptionLabel.getHeight(width: scrollView.bounds.width)
-        descriptionLabel.frame = CGRect(x: 0, y: dateLabel.frame.maxY, width: scrollView.frame.width, height: labelHeight)
+        let labelHeight = descriptionLabel.getHeight(width: scrollView.bounds.width-16)
+        descriptionLabel.frame = CGRect(x: 8, y: dateLabel.frame.maxY, width: scrollView.frame.width-16, height: labelHeight)
         
         var contentHeight = headerImage.bounds.height + dateLabel.bounds.height + descriptionLabel.bounds.height
         contentHeight = contentHeight > view.bounds.height ? contentHeight : view.frame.height
         scrollView.contentSize = CGSize(width: scrollView.bounds.width , height: contentHeight)
         
-        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        headerImage.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        dateLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        descriptionLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        headerImage.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        dateLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        descriptionLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         view.layoutIfNeeded()
     }
