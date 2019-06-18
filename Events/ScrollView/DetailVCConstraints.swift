@@ -49,14 +49,19 @@ class DetailVCConstraints: UIViewController {
         descriptionLabel.numberOfLines = 0
         return descriptionLabel
     }()
+    let labelStackView: UIStackView = {
+        let labelStackView = UIStackView()
+        labelStackView.translatesAutoresizingMaskIntoConstraints = false
+        labelStackView.axis = .vertical
+        labelStackView.isLayoutMarginsRelativeArrangement = true
+        labelStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        return labelStackView
+    }()
     var event: EventModel
     let defaultHeight: CGFloat = 300
-    var headerHeightConstraint: NSLayoutConstraint
     
     init(event: EventModel) {
         self.event = event
-        headerHeightConstraint = headerImage.heightAnchor.constraint(equalToConstant: defaultHeight)
-        NSLayoutConstraint.activate([headerHeightConstraint])
         super.init(nibName: nil, bundle: nil)
         
         view.backgroundColor = .white
@@ -66,6 +71,8 @@ class DetailVCConstraints: UIViewController {
         
         setupViews()
     }
+    
+    
 
     func setupViews() {
         //Add scrollveiw to mainview
@@ -79,14 +86,16 @@ class DetailVCConstraints: UIViewController {
         
         //Add views to stackview
         stackView.addArrangedSubview(headerImage)
-        stackView.addArrangedSubview(dateLabel)
-        stackView.addArrangedSubview(descriptionLabel)
+        stackView.addArrangedSubview(labelStackView)
         
-        //Set description length
-        descriptionLabel.heightAnchor.constraint(equalToConstant: descriptionLabel.getHeight(width: stackView.bounds.width))
-        view.layoutIfNeeded()
+        //label stackview
+        labelStackView.addArrangedSubview(dateLabel)
+        labelStackView.addArrangedSubview(descriptionLabel)
+        
+        //set Height of image and label
+        headerImage.heightAnchor.constraint(equalToConstant: defaultHeight).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalToConstant: descriptionLabel.getHeight(width: labelStackView.bounds.width))
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -105,4 +114,5 @@ extension DetailVCConstraints: UIScrollViewDelegate {
         }
     }
 }
+
 
