@@ -68,8 +68,8 @@ extension ListVC {
 //        self.navigationController?.pushViewController(detailVC, animated: true)
         
         item.image = item.image ?? UIImage(named: "placeholder_nomoon")
-        let showEvent = ShowEvent(event: item)
-        self.navigationController?.pushViewController(showEvent, animated: true)
+        let detailVC = DetailVCFrame(event: item)
+        self.navigationController?.pushViewController(detailVC, animated: true)
     }
     
 }
