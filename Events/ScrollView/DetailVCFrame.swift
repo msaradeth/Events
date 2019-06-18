@@ -52,7 +52,16 @@ class DetailVCFrame: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         setupSubviews()
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceRotated), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    @objc func deviceRotated(){
+        setupSubviews()
+    }
+    
 
     func setupSubviews() {
         view.addSubview(scrollView)
@@ -79,10 +88,10 @@ class DetailVCFrame: UIViewController {
         view.layoutIfNeeded()
     }
  
+
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        setupSubviews()
     }
     
     required init?(coder aDecoder: NSCoder) {
