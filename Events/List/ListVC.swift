@@ -19,6 +19,7 @@ class ListVC: UICollectionViewController {
         
         self.collectionView.backgroundColor = .white
         self.collectionView.register(UINib(nibName: "ListCell", bundle: nil), forCellWithReuseIdentifier: ListCell.cellIdentifier)
+        
         viewModel.loadData { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
@@ -30,7 +31,17 @@ class ListVC: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = myTitle
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.barTintColor = .yellow
+        self.navigationController?.navigationBar.barColor = .green
+        
+        self.navigationController?.navigationBar.barStyle = .black
+//        self.navigationController?.navigationBar.tintColor = .red
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.backgroundColor = .red
+        
     }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         collectionView.collectionViewLayout.invalidateLayout()

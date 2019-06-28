@@ -113,9 +113,9 @@ class DetailVCConstraints: UIViewController {
 extension DetailVCConstraints: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < 0 {
-            let offset = abs(scrollView.contentOffset.y)
-            let xStretch = offset * 0.5
-            headerImage.frame = CGRect(x: -xStretch, y: -offset, width: scrollView.bounds.size.width + (2 * xStretch), height: defaultHeight + offset)
+            let offsetY = abs(scrollView.contentOffset.y)
+            let offsetX = offsetY * 0.5 //take percentage of offsetY
+            headerImage.frame = CGRect(x: -offsetX, y: -offsetY, width: scrollView.bounds.size.width + (2 * offsetX), height: defaultHeight + offsetY)
         } else {
             headerImage.frame = CGRect(x: 0, y: 0, width: scrollView.bounds.size.width, height: defaultHeight)
         }

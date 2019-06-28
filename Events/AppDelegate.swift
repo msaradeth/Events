@@ -19,10 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let eventService = EventService()
         let viewModel = ListViewModel(items: items, eventService: eventService)
         let listVC = ListVC(title: "PHUN APP", viewModel: viewModel)
+        let nav = UINavigationController(rootViewController: listVC)
+        nav.hidesBarsOnSwipe = true
+//        nav.navigationBar.setBackgroundImage(UIImage(), for: .default)
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = UINavigationController(rootViewController: listVC)
+        window?.rootViewController = nav
         
         return true
     }
